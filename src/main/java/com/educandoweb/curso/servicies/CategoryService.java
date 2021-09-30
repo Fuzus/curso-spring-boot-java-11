@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.educandoweb.curso.entities.enums.Category;
+import com.educandoweb.curso.entities.Category;
 import com.educandoweb.curso.repositories.CategoryRepository;
 
 @Service

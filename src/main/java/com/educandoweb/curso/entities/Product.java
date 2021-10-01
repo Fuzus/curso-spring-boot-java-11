@@ -12,10 +12,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_product")
@@ -29,6 +32,9 @@ public class Product implements Serializable {
 	private String description;
 	private Double price;
 	private String imgUrl;
+	
+	@OneToMany(mappedBy = "id.product") @Fetch(FetchMode.JOIN)
+	private Set<OrderItem> itens = new HashSet<>();
 
 	@ManyToMany @Fetch(FetchMode.JOIN)
 	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
@@ -88,6 +94,15 @@ public class Product implements Serializable {
 
 	public Set<Category> getCategories() {
 		return categories;
+	}
+	
+	@JsonIgnore
+	public Set<Order> getOrders(){
+		Set<Order> set = new HashSet<>();
+		for(OrderItem x : itens) {
+			set.add(x.getOrder());
+		}
+		return set;
 	}
 
 	@Override
